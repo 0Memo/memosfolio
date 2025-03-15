@@ -1,7 +1,7 @@
 import './style.scss';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { DRACOLoader } from 'three/addons/loaders/DRACOloader.js';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFloader.js';
 
 const canvas = document.querySelector('#experience-canvas');
