@@ -17,7 +17,7 @@ const loadThree = async () => {
 
   // Model Loader
   const dracoLoader = new DRACOLoader();
-  dracoLoader.setDecoderPath( '/draco/' );
+  dracoLoader.setDecoderPath( '/draco/gltf' );
 
   const loadingManager = new THREE.LoadingManager();
   loadingManager.onStart = () => console.log('Loading started');
@@ -54,6 +54,7 @@ const loadThree = async () => {
   console.log('Loading model from:', modelUrl)
 
   loader.load( modelUrl, (glb) => {
+    console.log("Model loaded successfully", glb);
     const model = glb.scene;
 
     // Scale the model if too small
@@ -80,7 +81,14 @@ const loadThree = async () => {
     });
     
     scene.add( model);
-  } );
+  },
+  (xhr) => {
+    console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
+  },
+  (error) => {
+    console.error("Error loading model", error);
+  }
+);
 
   const renderer = new THREE.WebGLRenderer( { canvas: canvas, antialias: true } );
   renderer.setSize( sizes.width, sizes.height );
