@@ -1,0 +1,19 @@
+{
+    "version": 2,
+    "builds": [
+        {
+            "src": "public/**/*",
+            "use": "@vercel/static"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/models/(.*)",
+            "dest": "/public/models/$1"
+        },
+        {
+            "src": "/textures/video/(.*)",
+            "dest": "/public/textures/video/$1"
+        }
+    ]
+}  
