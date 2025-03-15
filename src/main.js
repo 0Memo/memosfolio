@@ -17,7 +17,7 @@ const loadThree = async () => {
 
   // Model Loader
   const dracoLoader = new DRACOLoader();
-  dracoLoader.setDecoderPath( '/draco/gltf' );
+  dracoLoader.setDecoderPath( '/draco/' );
 
   const loadingManager = new THREE.LoadingManager();
   loadingManager.onStart = () => console.log('Loading started');
@@ -50,7 +50,7 @@ const loadThree = async () => {
   videoTexture.colorSpace = THREE.SRGBColorSpace;
   videoTexture.flipY = false;
 
-  const modelUrl = "/models/Room_Project_w_materials2.glb";
+  const modelUrl = "/models/Room_Project_w_materials.glb";
   console.log('Loading model from:', modelUrl)
 
   loader.load( modelUrl, (glb) => {

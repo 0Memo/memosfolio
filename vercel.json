@@ -9,11 +9,11 @@
     "routes": [
         {
             "src": "/models/(.*)",
-            "dest": "/public/models/$1"
+            "dest": "/models/$1"
         },
         {
             "src": "/textures/video/(.*)",
-            "dest": "/public/textures/video/$1"
+            "dest": "/textures/video/$1"
         }
     ]
 }  
