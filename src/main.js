@@ -50,8 +50,10 @@ const loadThree = async () => {
   videoTexture.colorSpace = THREE.SRGBColorSpace;
   videoTexture.flipY = false;
 
-  loader.load( "/models/Room_Project_w_materials2.glb", (glb) => {
-    console.log('Loaded model from: ', '/models/Room_Project_w_materials2.glb');
+  const modelUrl = "/models/Room_Project_w_materials2.glb";
+  console.log('Loading model from:', modelUrl)
+
+  loader.load( modelUrl, (glb) => {
     const model = glb.scene;
 
     // Scale the model if too small
