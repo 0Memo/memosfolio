@@ -42,13 +42,16 @@ const loadThree = async () => {
   videoElement.muted = true;
   videoElement.playsInline = true;
   videoElement.autoplay = true;
-  videoElement.play();
+  videoElement.addEventListener('canplay', () => {
+    videoElement.play();
+  });
 
   const videoTexture = new THREE.VideoTexture( videoElement );
   videoTexture.colorSpace = THREE.SRGBColorSpace;
   videoTexture.flipY = false;
 
   loader.load( "/models/Room_Project_w_materials2.glb", (glb) => {
+    console.log('Loaded model from: ', '/models/Room_Project_w_materials2.glb');
     const model = glb.scene;
 
     // Scale the model if too small
