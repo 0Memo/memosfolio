@@ -12,18 +12,20 @@ const loadThree = async () => {
   const { OrbitControls } = await import('three/addons/controls/OrbitControls.js');
   const { DRACOLoader } = await import('three/examples/jsm/loaders/DRACOLoader.js');
   const { GLTFLoader } = await import('three/examples/jsm/loaders/GLTFLoader.js');
-  // Texture Loader
-  const textureLoader = new THREE.TextureLoader();
 
-  // Model Loader
+/*   // Texture Loader
+  const textureLoader = new THREE.TextureLoader(); */
+
+  // Draco Loader
   const dracoLoader = new DRACOLoader();
-  dracoLoader.setDecoderPath( '/draco/' );
+  dracoLoader.setDecoderPath( 'https://www.gstatic.com/draco/versioned/decoders/1.5.7/' );
+  dracoLoader.setDecoderConfig( { type: 'js' } );
 
   const loadingManager = new THREE.LoadingManager();
   loadingManager.onStart = () => console.log('Loading started');
   loadingManager.onLoad = () => console.log('Loading complete');
 
-  // Model Loader
+  // GLTF Loader
   const loader = new GLTFLoader(loadingManager);
   loader.setDRACOLoader(dracoLoader);
 
@@ -51,21 +53,13 @@ const loadThree = async () => {
   videoTexture.flipY = false;
 
   const modelUrl = "/models/Room_Project_w_materials.glb";
-  console.log('Loading model from:', modelUrl)
 
   loader.load( modelUrl, (glb) => {
-    console.log("Model loaded successfully", glb);
     const model = glb.scene;
 
-    // Scale the model if too small
-    model.scale.set(5, 5, 5); // Increase the size
-    
-    // Adjust the position
-    model.position.set(0, -1, 0); // Move it down if it's floating above
-
-    // Rotate if needed
+    model.scale.set(5, 5, 5);
+    model.position.set(0, -1, 0);
     model.rotation.y = -Math.PI / 5;
-    // console.log('Model loaded', glb.scene)
 
     model.traverse((child) => {
       if (child.isMesh) {
