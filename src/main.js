@@ -52,7 +52,7 @@ const loadThree = async () => {
   videoTexture.colorSpace = THREE.SRGBColorSpace;
   videoTexture.flipY = false;
 
-  const modelUrl = "/models/Room_Project_w_materials.glb";
+  const modelUrl = "/models/Room_Project.glb";
 
   loader.load( modelUrl, (glb) => {
     const model = glb.scene;
