@@ -1,0 +1,12 @@
+$base-purple: #160237FF;
+$base-green: #88BF32FF;
+$base-red: #E70010FF;
+$base-black: #000000FF;
+$base-white: #E7E7E7FF;
+
+// Mixins
+@mixin centered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+};
