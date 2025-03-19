@@ -372,7 +372,7 @@ const loadThree = async () => {
 
   window.addEventListener("click", handleRaycasterInteraction);
 
-  const modelUrl = "/models/Room_Project_opt.glb";
+  const modelUrl = "/models/Room_Project.glb";
   let lastLoggedPercentage = -1;
 
   loader.load( modelUrl, (glb) => {
