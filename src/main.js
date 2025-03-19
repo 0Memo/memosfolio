@@ -226,21 +226,34 @@ const loadThree = async () => {
 
   const manager = new THREE.LoadingManager();
   manager.onStart = () => console.log('Starting loading process...');
-  manager.onLoad = () => console.log('Loading successful!');
-
+  // manager.onLoad = () => console.log('Loading successful!');
   const loadingScreen = document.querySelector(".loading-screen");
   const loadingScreenButton = document.querySelector(".loading-screen-button");
 
+  manager.onProgress = function (url, itemsLoaded, itemsTotal) {
+    let progress = Math.round((itemsLoaded / itemsTotal) * 100);
+    loadingScreenButton.textContent = `Room is loading...${progress}%`;
+  };
+
   manager.onLoad = function () {
-    loadingScreenButton.style.border = "8px solid rgb(23, 4, 51)";
-    loadingScreenButton.style.background = "rgba(20, 4, 44, 0.42)";
-    loadingScreenButton.style.color = "#e6dede";
-    loadingScreenButton.style.boxShadow = "rgba(0, 0, 0, 0.24) 0px 3px 8px";
-    loadingScreenButton.textContent = "Welcome to my world!";
-    loadingScreenButton.style.cursor = "pointer";
-    loadingScreenButton.style.transition =
-      "transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)";
+    console.log('Loading successful!');
+    loadingScreenButton.textContent = `Fully loaded 100%!`;
+    
+    setTimeout(() => {
+      loadingScreenButton.style.border = "8px solid rgb(23, 4, 51)";
+      loadingScreenButton.style.background = "rgba(20, 4, 44, 0.42)";
+      loadingScreenButton.style.color = "#e6dede";
+      loadingScreenButton.style.boxShadow = "rgba(0, 0, 0, 0.24) 0px 3px 8px";
+      loadingScreenButton.textContent = "༄ Welcome to my world!";
+      loadingScreenButton.style.cursor = "pointer";
+      loadingScreenButton.style.transition =
+        "transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)";
+    }, 5000);
     let isDisabled = false;
+
+    setTimeout(() => {
+      document.querySelector(".loading-screen").style.display = "none";
+    }, 100000);
 
     function handleEnter() {
       if (isDisabled) return;
@@ -250,7 +263,7 @@ const loadThree = async () => {
       loadingScreenButton.style.background = "#e6dede";
       loadingScreenButton.style.color = "rgba(20, 4, 44, 0.42)";
       loadingScreenButton.style.boxShadow = "none";
-      loadingScreenButton.textContent = "~ ¡Bienvenido a mi mundo! ~";
+      loadingScreenButton.textContent = "༄ ¡Bienvenido a mi mundo!";
       loadingScreen.style.background = "#e6dede";
       isDisabled = true;
 
