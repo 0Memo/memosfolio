@@ -385,7 +385,7 @@ const loadThree = async () => {
 
   window.addEventListener("click", handleRaycasterInteraction);
 
-  const modelUrl = "/models/Room_Project.glb";
+  const modelUrl = "/models/Room_Project_opt.glb";
   let lastLoggedPercentage = -1;
 
   loader.load( modelUrl, (glb) => {
@@ -416,6 +416,7 @@ const loadThree = async () => {
       }      
     });
     
+    scene.background = new THREE.Color('#0b021a');
     scene.add( model);
   },
   (xhr) => {
