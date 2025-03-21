@@ -37,6 +37,71 @@ body {
   }
 }
 
+// Image Styles
+
+.image-wrapper {
+  width: 100%;
+  height: 550px;
+  overflow: hidden;
+  margin-bottom: 12px;
+  @include media.media("<=tablet") {
+    height: auto;
+  }
+}
+
+.base-image {
+  height: 100%;
+  width: 100%;
+  border-radius: 24px;
+  object-fit: cover;
+  border: 6px solid vars.$base-purple;
+}
+
+.work-image-wrapper {
+  width: 100%;
+  height: 350px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.projects-image-wrapper {
+  width: 100%;
+  height: 350px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.education-image-wrapper {
+  width: 100%;
+  height: 350px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.work-base-image {
+  height: 100%;
+  width: 100%;
+  border-radius: 24px;
+  object-fit: cover;
+  border: 6px solid vars.$base-purple;
+}
+
+.projects-base-image {
+  height: 100%;
+  width: 100%;
+  border-radius: 24px;
+  object-fit: cover;
+  border: 6px solid vars.$base-purple;
+}
+
+.education-base-image {
+  height: 100%;
+  width: 100%;
+  border-radius: 24px;
+  object-fit: cover;
+  border: 6px solid vars.$base-purple;
+}
+
 // Overlay
 .overlay {
   height: 100vh;
@@ -66,7 +131,7 @@ body {
   padding: 30px;
   border-radius: 25px;
   display: none;
-  border: 8px solid vars.$base-purple;
+  border: 8px solid rgb(11, 2, 23) !important;
 }
 
 // Toggle Button
@@ -264,10 +329,28 @@ ul {
 
 .about {
   max-width: 800px;
+  height: 650px !important;
+  margin: 10px 0 0 0 ;
+  background-color: vars.$base-white;
 }
 
 .contact {
   max-width: 500px;
+  background-color: vars.$base-white;
+}
+
+.work, .education {
+  max-width: 1200px;
+  height: 650px !important;
+  margin: 10px 0 0 0 ;
+  background-color: vars.$base-white;
+}
+
+.projects {
+  max-width: 1600px;
+  height: 650px !important;
+  margin: 10px 0 0 0 ;
+  background-color: vars.$base-white;
 }
 
 .modal-wrapper {
@@ -283,10 +366,11 @@ ul {
 
 .modal-title {
   @include vars.centered;
+  font-family: 'Game Buble - Personal Use';
   padding: 10px 80px;
   border-radius: 5rem;
-  color: vars.$base-purple;
-  background-color: vars.$base-purple;
+  color: vars.$base-white;
+  background-color: rgb(28, 6, 61);
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   @include media.media("<=tablet") {
     font-size: 1.5rem;
@@ -297,6 +381,7 @@ ul {
 
 .modal-paragraph-header {
   font-size: 1.5rem;
+  font-family: "Game Buble - Personal Use";
   margin-top: 24px;
   margin-bottom: 8px;
   @include media.media("<=tablet") {
@@ -315,6 +400,7 @@ ul {
 }
 
 .modal-paragraph-text {
+  margin-bottom: 10px;
   font-size: 1.5rem;
   @include media.media("<=tablet") {
     font-size: 1.3rem;
@@ -348,7 +434,23 @@ ul {
 }
 
 .work .modal-content {
-  height: 550px;
+  height: 500px;
+
+  @include media.media("<=tablet") {
+    height: 500px;
+  }
+}
+
+.projects .modal-content {
+  height: 500px;
+
+  @include media.media("<=tablet") {
+    height: 500px;
+  }
+}
+
+.education .modal-content {
+  height: 500px;
 
   @include media.media("<=tablet") {
     height: 500px;
@@ -356,7 +458,8 @@ ul {
 }
 
 .about .modal-content {
-  height: 550px;
+  height: 500px;
+
   @include media.media("<=tablet") {
     height: 500px;
   }
@@ -426,6 +529,69 @@ ul {
   height: auto;
 }
 
+.projects .modal-content-wrapper {
+  @include vars.centered;
+  flex-wrap: wrap;
+  gap: 18px;
+  justify-content: center;
+  @include media.media("<=tablet") {
+    justify-content: space-between;
+    flex-direction: column;
+  }
+}
+
+.projects-details {
+  padding-top: 16px;
+  @include vars.centered;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  width: calc(33.33% - 12px); 
+  justify-content: start;
+  height: 100%;
+  margin-bottom: 80px !important;
+  @include media.media("<=tablet") {
+    height: auto;
+    width: 100%;
+    padding-bottom: 24px;
+  }
+}
+
+.projects-details-wrapper {
+  width: 100%;
+  height: auto;
+}
+
+.education .modal-content-wrapper {
+  @include vars.centered;
+  flex-direction: row;
+  gap: 18px;
+  @include media.media("<=tablet") {
+    justify-content: space-between;
+    flex-direction: column;
+  }
+}
+
+.education-details {
+  padding-top: 16px;
+  @include vars.centered;
+  flex-direction: column;
+  gap: 28px;
+  width: 80%;
+  justify-content: start;
+  height: 100%;
+  @include media.media("<=tablet") {
+    height: auto;
+    width: 100%;
+    padding-bottom: 24px;
+  }
+}
+
+.education-details-wrapper {
+  width: 100%;
+  height: auto;
+}
+
 .contact .modal-content-wrapper {
   overflow: visible;
 }
@@ -435,8 +601,8 @@ ul {
   position: absolute;
   top: -2.3rem;
   left: -2.3rem;
-  border: 8px solid vars.$base-purple;
-  background-color: vars.$base-purple;
+  border: 8px solid rgb(11, 2, 23);
+  background-color: rgb(28, 6, 61);
   padding: 15px;
   border-radius: 1.2rem;
   cursor: pointer;
@@ -464,7 +630,7 @@ ul {
 .exit-button-svg {
   width: 40px;
   height: 40px;
-  color: vars.$base-purple;
+  color: vars.$base-white;
   @include media.media("<=tablet") {
     width: 25px;
     height: 25px;
@@ -488,6 +654,7 @@ ul {
 .linkedin {
   width: 60px;
   height: 60px;
+  color: rgba(20, 4, 44);
   &:hover {
     transform: rotate(15deg) scale(1.3);
   }
@@ -496,22 +663,16 @@ ul {
 .github {
   width: 60px;
   height: 60px;
+  color: rgba(20, 4, 44);
   &:hover {
     transform: rotate(-15deg) scale(1.3);
-  }
-}
-
-.instagram {
-  width: 63px;
-  height: 63px;
-  &:hover {
-    transform: rotate(35deg) scale(1.3);
   }
 }
 
 .mail {
   width: 68px;
   height: 68px;
+  color: rgba(20, 4, 44);
   &:hover {
     transform: rotate(-35deg) scale(1.3);
   }

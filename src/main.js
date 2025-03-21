@@ -93,6 +93,14 @@ const loadThree = async () => {
 
   // Modal settings
 
+  const modals = {
+    work: document.querySelector(".modal.work"),
+    about: document.querySelector(".modal.about"),
+    contact: document.querySelector(".modal.contact"),
+    education: document.querySelector(".modal.education"),
+    projects: document.querySelector(".modal.projects"),
+  };
+
   const overlay = document.querySelector(".overlay");
 
   let touchHappened = false;
@@ -355,6 +363,10 @@ const loadThree = async () => {
     if (currentIntersects.length > 0) {
       const object = currentIntersects[0].object;
 
+      if (object.name.includes("Button")) {
+        buttonSounds.click.play();
+      }
+
       Object.entries(socialLinks).forEach(([key, url]) => {
         if (object.name.includes(key)) {
           const newWindow = window.open();
@@ -364,6 +376,18 @@ const loadThree = async () => {
           newWindow.rel = "noopener noreferrer";
         }
       });
+
+      if (object.name.includes("Experiences_Raycaster_Button")) {
+        showModal(modals.work);
+      } else if (object.name.includes("About-Me_Raycaster_Button")) {
+        showModal(modals.about);
+      } else if (object.name.includes("Contact_Raycaster_Button")) {
+        showModal(modals.contact);
+      } else if (object.name.includes("Education_Raycaster_Button")) {
+        showModal(modals.education);
+      } else if (object.name.includes("Projects_Raycaster_Button")) {
+        showModal(modals.projects);
+      }
     }
   }
 
@@ -406,6 +430,10 @@ const loadThree = async () => {
 
         if ( child.name.includes("Hover" )) {
           child.userData.initialScale = new THREE.Vector3().copy(child.scale);
+          child.userData.initialPosition = new THREE.Vector3().copy(
+            child.position
+          );
+          child.userData.initialRotation = new THREE.Euler().copy(child.rotation);
         }
   
         if ( child.name === "Screen") {
@@ -432,13 +460,14 @@ const loadThree = async () => {
   });
 
   function playHoverAnimation(object, isHovering) {
+    let scale = 1.2;
     gsap.killTweensOf(object.scale);
 
     if (isHovering) {
       gsap.to(object.scale, {
-        x: object.userData.initialScale.x * 1.2,
-        y: object.userData.initialScale.y * 1.2,
-        z: object.userData.initialScale.z * 1.2,
+        x: object.userData.initialScale.x * scale,
+        y: object.userData.initialScale.y * scale,
+        z: object.userData.initialScale.z * scale,
         duration: 0.5,
         ease: "bounce.out(1.8)"
       });
@@ -460,69 +489,69 @@ const loadThree = async () => {
   const soundOnSvg = document.querySelector(".sound-on-svg");
   
   const updateMuteState = (muted) => {
-  if (muted) {
-  backgroundMusic.volume(0);
-  } else {
-  backgroundMusic.volume(BACKGROUND_MUSIC_VOLUME);
-  }
-  
-  buttonSounds.click.mute(muted);
+    if (muted) {
+    backgroundMusic.volume(0);
+    } else {
+    backgroundMusic.volume(BACKGROUND_MUSIC_VOLUME);
+    }
+    
+    buttonSounds.click.mute(muted);
   };
   
   let isMuted = false;
   
   const handleMuteToggle = (e) => {
-  e.preventDefault();
-  
-  isMuted = !isMuted;
-  updateMuteState(isMuted);
-  buttonSounds.click.play();
-  
-  gsap.to(muteToggleButton, {
-  rotate: -45,
-  scale: 5,
-  duration: 0.5,
-  ease: "back.out(2)",
-  onStart: () => {
-  if (!isMuted) {
-  soundOffSvg.style.display = "none";
-  soundOnSvg.style.display = "block";
-  } else {
-  soundOnSvg.style.display = "none";
-  soundOffSvg.style.display = "block";
-  }
-  
-  gsap.to(muteToggleButton, {
-  rotate: 0,
-  scale: 1,
-  duration: 0.5,
-  ease: "back.out(2)",
-  onComplete: () => {
-  gsap.set(muteToggleButton, {
-  clearProps: "all",
-  });
-  },
-  });
-  },
-  });
+    e.preventDefault();
+    
+    isMuted = !isMuted;
+    updateMuteState(isMuted);
+    buttonSounds.click.play();
+    
+    gsap.to(muteToggleButton, {
+      rotate: -45,
+      scale: 5,
+      duration: 0.5,
+      ease: "back.out(2)",
+      onStart: () => {
+        if (!isMuted) {
+        soundOffSvg.style.display = "none";
+        soundOnSvg.style.display = "block";
+        } else {
+        soundOnSvg.style.display = "none";
+        soundOffSvg.style.display = "block";
+        }
+        
+        gsap.to(muteToggleButton, {
+          rotate: 0,
+          scale: 1,
+          duration: 0.5,
+          ease: "back.out(2)",
+          onComplete: () => {
+            gsap.set(muteToggleButton, {
+              clearProps: "all",
+            });
+          },
+        });
+      },
+    });
   };
   
   muteToggleButton.addEventListener(
-  "click",
-  (e) => {
-  if (touchHappened) return;
-  handleMuteToggle(e);
-  },
-  { passive: false }
+    "click",
+    (e) => {
+    if (touchHappened) return;
+    handleMuteToggle(e);
+    },
+    { passive: false }
   );
   
   muteToggleButton.addEventListener(
-  "touchend",
-  (e) => {
-  touchHappened = true;
-  handleMuteToggle(e);
-  },
-  { passive: false }
+    "touchend",
+    (e) => {
+    touchHappened = true;
+    handleMuteToggle(e);
+    },
+    { passive: false }
   );
 
   const render = () => {
@@ -533,38 +562,37 @@ const loadThree = async () => {
     console.log('controls.target', controls.target); */
 
     // Raycaster
-      raycaster.setFromCamera( pointer, camera );
+        raycaster.setFromCamera( pointer, camera );
 
-      currentIntersects = raycaster.intersectObjects(raycasterObjects);
+        currentIntersects = raycaster.intersectObjects(raycasterObjects);
 
-      for ( let i = 0; i < currentIntersects.length; i++ ) {
-      }
+        for ( let i = 0; i < currentIntersects.length; i++ ) {}
 
-      if ( currentIntersects.length > 0 ) {
-        const currentIntersectObject = currentIntersects[0].object;
+        if ( currentIntersects.length > 0 ) {
+          const currentIntersectObject = currentIntersects[0].object;
 
-        if (currentIntersectObject.name.includes("Hover")) {
-          if (currentIntersectObject !== currentHoveredObject) {
-            if (currentHoveredObject) {
-              playHoverAnimation(currentHoveredObject, false);
+          if (currentIntersectObject.name.includes("Hover")) {
+            if (currentIntersectObject !== currentHoveredObject) {
+              if (currentHoveredObject) {
+                playHoverAnimation(currentHoveredObject, false);
+              }
+              playHoverAnimation(currentIntersectObject, true);
+              currentHoveredObject = currentIntersectObject;
             }
-            playHoverAnimation(currentIntersectObject, true);
-            currentHoveredObject = currentIntersectObject;
           }
-        }
 
-        if ( currentIntersectObject.name.includes("Pointer")) {
-          document.body.style.cursor = "pointer";
+          if ( currentIntersectObject.name.includes("Pointer")) {
+            document.body.style.cursor = "pointer";
+          } else {
+            document.body.style.cursor = "default";
+          }
         } else {
+          if (currentHoveredObject) {
+            playHoverAnimation(currentHoveredObject, false);
+            currentHoveredObject = null;
+          }
           document.body.style.cursor = "default";
         }
-      } else {
-        if (currentHoveredObject) {
-          playHoverAnimation(currentHoveredObject, false);
-          currentHoveredObject = null;
-        }
-        document.body.style.cursor = "default";
-      }
 
     renderer.render( scene, camera );
 
