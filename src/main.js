@@ -269,9 +269,10 @@ const loadThree = async () => {
     function handleEnter() {
       if (isDisabled) return;
       isDisabled = true;
+      
+      playReveal();
 
       backgroundMusic.play();
-      playReveal();
     }
 
     // Ensure both events work correctly
@@ -305,7 +306,7 @@ const loadThree = async () => {
       {
         y: "200vh",
         transform: "perspective(1000px) rotateX(45deg) rotateY(-35deg)",
-        duration: 1.2,
+        duration: 0.8,
         ease: "back.in(1.8)",
         onComplete: () => {
           loadingScreen.remove();
