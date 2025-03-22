@@ -233,10 +233,14 @@ const loadThree = async () => {
   // Loading screen
 
   const manager = new THREE.LoadingManager();
-  manager.onStart = () => console.log('Starting loading process...');
-  // manager.onLoad = () => console.log('Loading successful!');
   const loadingScreen = document.querySelector(".loading-screen");
   const loadingScreenButton = document.querySelector(".loading-screen-button");
+
+  manager.onStart = function () {
+    console.log("Starting loading process...");
+    loadingScreenButton.style.opacity = "1";
+    loadingScreenButton.innerText = "Room is loading...";
+  };
 
   manager.onProgress = function (url, itemsLoaded, itemsTotal) {
     let progress = Math.round((itemsLoaded / itemsTotal) * 100);
@@ -246,56 +250,54 @@ const loadThree = async () => {
   manager.onLoad = function () {
     console.log('Loading successful!');
     loadingScreenButton.textContent = `Fully loaded 100%!`;
+    loadingScreenButton.style.pointerEvents = "auto"; 
     
-    setTimeout(() => {
-      loadingScreenButton.style.border = "8px solid rgb(23, 4, 51)";
-      loadingScreenButton.style.background = "rgba(20, 4, 44, 0.42)";
-      loadingScreenButton.style.color = "#e6dede";
-      loadingScreenButton.style.boxShadow = "rgba(0, 0, 0, 0.24) 0px 3px 8px";
-      loadingScreenButton.textContent = "༄ Welcome to my world!";
-      loadingScreenButton.style.cursor = "pointer";
-      loadingScreenButton.style.transition =
-        "transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)";
-    }, 5000);
-    let isDisabled = false;
+    // Trigger opacity change using requestAnimationFrame
+    requestAnimationFrame(() => {
+      loadingScreenButton.style.opacity = 1;
+    });
 
+    // Use setTimeout to show the next text after a slight delay
     setTimeout(() => {
-      document.querySelector(".loading-screen").style.display = "none";
-    }, 100000);
+      requestAnimationFrame(() => {
+        loadingScreenButton.textContent = "༄ ¡Bienvenido a mi mundo!";
+      });
+    }, 3000);
+
+    let isDisabled = false;
 
     function handleEnter() {
       if (isDisabled) return;
-
-      loadingScreenButton.style.cursor = "default";
-      loadingScreenButton.style.border = "8px solid rgb(23, 4, 51)";
-      loadingScreenButton.style.background = "#e6dede";
-      loadingScreenButton.style.color = "rgba(20, 4, 44, 0.42)";
-      loadingScreenButton.style.boxShadow = "none";
-      loadingScreenButton.textContent = "༄ ¡Bienvenido a mi mundo!";
-      loadingScreen.style.background = "#e6dede";
       isDisabled = true;
 
-      backgroundMusic.play();
-      playReveal();
+      // Offload heavy work asynchronously
+      // Use setTimeout for non-urgent tasks
+      setTimeout(() => {
+        if (typeof requestIdleCallback === "function") {
+          requestIdleCallback(() => {
+            backgroundMusic.play();
+            playReveal();
+          });
+        } else {
+          // Fallback for environments where requestIdleCallback is not available
+          setTimeout(() => {
+            backgroundMusic.play();
+            playReveal();
+          }, 100); // Small delay to allow UI to update
+        }
+      }, 0);
     }
-
-    loadingScreenButton.addEventListener("mouseenter", () => {
-      loadingScreenButton.style.transform = "scale(1.3)";
-    });
 
     loadingScreenButton.addEventListener("touchend", (e) => {
       touchHappened = true;
       e.preventDefault();
+      e.stopPropagation();
       handleEnter();
     });
 
     loadingScreenButton.addEventListener("click", (e) => {
       if (touchHappened) return;
       handleEnter();
-    });
-
-    loadingScreenButton.addEventListener("mouseleave", () => {
-      loadingScreenButton.style.transform = "none";
     });
   };
 
@@ -511,74 +513,107 @@ const loadThree = async () => {
   // Other Event Listeners
   
   const muteToggleButton = document.querySelector(".mute-toggle-button");
-  const soundOffSvg = document.querySelector(".sound-off-svg");
   const soundOnSvg = document.querySelector(".sound-on-svg");
   
   const updateMuteState = (muted) => {
     if (muted) {
-    backgroundMusic.volume(0);
+      backgroundMusic.volume(0);
     } else {
-    backgroundMusic.volume(BACKGROUND_MUSIC_VOLUME);
+      backgroundMusic.volume(BACKGROUND_MUSIC_VOLUME);
     }
     
     buttonSounds.click.mute(muted);
   };
   
   let isMuted = false;
-  
+
+  // Initialize mute state
+  const initializeMuteState = () => {
+    // Check the initial volume to determine if the sound is muted or not
+    isMuted = backgroundMusic.volume() === 0;
+    updateMuteState(isMuted);
+
+    // Set the initial class on the button based on mute state
+    if (isMuted) {
+      muteToggleButton.classList.add("sound-off");
+      muteToggleButton.classList.remove("sound-on");
+    } else {
+      muteToggleButton.classList.add("sound-on");
+      muteToggleButton.classList.remove("sound-off");
+    }
+  };
+
+  // Run the initialization when the page loads
+  initializeMuteState();
+
   const handleMuteToggle = (e) => {
     e.preventDefault();
-    
+
+    // Toggle mute state
     isMuted = !isMuted;
+
+    // Update mute state immediately
     updateMuteState(isMuted);
-    buttonSounds.click.play();
-    
-    gsap.to(muteToggleButton, {
-      rotate: -45,
-      scale: 5,
-      duration: 0.5,
-      ease: "back.out(2)",
-      onStart: () => {
-        if (!isMuted) {
-        soundOffSvg.style.display = "none";
-        soundOnSvg.style.display = "block";
-        } else {
-        soundOnSvg.style.display = "none";
-        soundOffSvg.style.display = "block";
-        }
-        
+  
+    if ('requestIdleCallback' in window) {
+      // Play the sound effect for the toggle
+      buttonSounds.click.play();
+
+      // Toggle the border color class based on mute state
+      muteToggleButton.classList.toggle("sound-on", !isMuted);
+      muteToggleButton.classList.toggle("sound-off", isMuted);
+      
+      gsap.to(muteToggleButton, {
+        scale: 1.2,
+        duration: 0.2,
+        ease: "back.out(2)",
+        onStart: () => {
+          soundOnSvg.style.display = "block";
+        },
+        onComplete: () => {
+          gsap.to(muteToggleButton, {
+            scale: 1,
+            duration: 0.2,
+            ease: "back.out(2)",
+            onComplete: () => gsap.set(muteToggleButton, { clearProps: "all" }),
+          });
+        },
+      });
+    } else {
+      setTimeout(() => {
+        // Fallback if requestIdleCallback isn't supported
+        buttonSounds.click.play();
+
+        // Toggle the border color class based on mute state
+        muteToggleButton.classList.toggle("sound-on", !isMuted);
+        muteToggleButton.classList.toggle("sound-off", isMuted);
+
         gsap.to(muteToggleButton, {
-          rotate: 0,
-          scale: 1,
-          duration: 0.5,
+          scale: 1.2,
+          duration: 0.2,
           ease: "back.out(2)",
+          onStart: () => {
+            soundOnSvg.style.transform = 'scale(1)';
+          },
           onComplete: () => {
-            gsap.set(muteToggleButton, {
-              clearProps: "all",
+            gsap.to(muteToggleButton, {
+              scale: 1,
+              duration: 0.2,
+              ease: "back.out(2)",
+              onComplete: () => gsap.set(muteToggleButton, { clearProps: "all" }),
             });
           },
         });
-      },
-    });
+      }, 0);
+    }
   };
   
-  muteToggleButton.addEventListener(
-    "click",
-    (e) => {
-    if (touchHappened) return;
-    handleMuteToggle(e);
-    },
-    { passive: false }
-  );
+  muteToggleButton.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    if (touchHappened) return;  // This is optional, for handling double-tap or touch events.
   
-  muteToggleButton.addEventListener(
-    "touchend",
-    (e) => {
-    touchHappened = true;
     handleMuteToggle(e);
-    },
-    { passive: false }
-  );
+  });
 
   const render = () => {
     controls.update();

@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="preload" as="fetch" href="/models/Room_Project.glb" type="model/gltf-binary">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Memosfolio</title>
     <link rel="stylesheet" href="./src/style.scss" />
@@ -20,33 +21,6 @@
     <div class="overlay"></div>
 
     <button class="mute-toggle-button toggle-buttons">
-      <svg
-        width="800"
-        height="800"
-        viewBox="0 0 800 800"
-        fill="none"
-        class="sound-svg sound-off-svg"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M366.064 567.04C430.064 624 508.464 663.04 545.584 650.56C612.784 625.6 623.984 490.557 623.984 397.117C623.984 371.197 623.984 341.76 620.464 312.641"
-          stroke-width="85"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M596.134 200.963C592.038 188.521 585.44 177.047 576.746 167.252C568.051 157.456 557.443 149.545 545.578 144.002C506.218 129.282 422.698 175.999 353.578 237.119H302.375C268.427 237.119 235.87 250.606 211.865 274.611C187.86 298.616 174.375 331.171 174.375 365.12V429.12C174.365 453.795 181.488 477.952 194.887 498.672C208.285 519.395 227.387 535.802 249.894 545.92"
-          stroke-width="85"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M720 77.4414L80 717.44"
-          stroke-width="85"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
 
       <svg width="800px" height="800px" class="sound-svg sound-on-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path fill-rule="evenodd" clip-rule="evenodd" d="M2 13C2 15.2091 3.79086 17 6 17H6.19669C6.69707 17 7.17928 17.1876 7.54814 17.5257L10.4773 20.2107C11.0311 20.7184 11.755 21 12.5063 21C13.7594 21 14.9494 20.2016 15.2601 18.8803C15.5904 17.476 16 15.1081 16 12C16 8.89192 15.5904 6.52403 15.2601 5.11974C14.9494 3.79838 13.7594 3 12.5063 3C11.755 3 11.0311 3.28161 10.4773 3.78926L7.54813 6.47431C7.17928 6.81243 6.69707 7 6.19669 7H6C3.79086 7 2 8.79086 2 11V13ZM6 15C4.89543 15 4 14.1046 4 13V11C4 9.89543 4.89543 9 6 9H6.19669C7.19745 9 8.16186 8.62486 8.89958 7.94862L11.8287 5.26357C12.0137 5.09404 12.2554 5 12.5063 5C12.9376 5 13.2384 5.25937 13.3132 5.57761C13.6134 6.85393 14 9.06723 14 12C14 14.9328 13.6134 17.1461 13.3132 18.4224C13.2384 18.7406 12.9376 19 12.5063 19C12.2554 19 12.0137 18.906 11.8287 18.7364L8.89958 16.0514C8.16186 15.3751 7.19745 15 6.19669 15H6Z" fill="#0F1729"/>
