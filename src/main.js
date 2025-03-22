@@ -412,52 +412,78 @@ const loadThree = async () => {
   const modelUrl = "/models/Room_Project.glb";
   let lastLoggedPercentage = -1;
 
-  loader.load( modelUrl, (glb) => {
-    const model = glb.scene;
+  let model = null;
+  const loadModel = () => {
+    if (model) return;
 
-    model.scale.set(5, 5, 5);
-    model.position.set(0, -1, 0);
-    model.rotation.y = -Math.PI / 5;
+    loader.load( modelUrl, (glb) => {
+      const model = glb.scene;
 
-    model.traverse((child) => {
-      if (child.isMesh) {
-        child.material.transparent = false;
-        child.visible = true;
+      model.scale.set(5, 5, 5);
+      model.position.set(0, -1, 0);
+      model.rotation.y = -Math.PI / 5;
 
-        if ( child.name.includes("Raycaster" )) {
-          raycasterObjects.push(child);
-        }
+      model.traverse((child) => {
+        if (child.isMesh) {
+          child.material.transparent = false;
+          child.visible = true;
 
-        if ( child.name.includes("Hover" )) {
-          child.userData.initialScale = new THREE.Vector3().copy(child.scale);
-          child.userData.initialPosition = new THREE.Vector3().copy(
-            child.position
-          );
-          child.userData.initialRotation = new THREE.Euler().copy(child.rotation);
-        }
-  
-        if ( child.name === "Screen") {
-          child.material = new THREE.MeshBasicMaterial({
-            map: videoTexture,
-          })
-        }
-      }      
-    });
+          if ( child.name.includes("Raycaster" )) {
+            raycasterObjects.push(child);
+          }
+
+          if ( child.name.includes("Hover" )) {
+            child.userData.initialScale = new THREE.Vector3().copy(child.scale);
+            child.userData.initialPosition = new THREE.Vector3().copy(
+              child.position
+            );
+            child.userData.initialRotation = new THREE.Euler().copy(child.rotation);
+          }
     
-    scene.background = new THREE.Color('#0b021a');
-    scene.add( model);
-  },
-  (xhr) => {
-    let percentage = Math.floor((xhr.loaded / xhr.total) * 100);
+          if ( child.name === "Screen") {
+            child.material = new THREE.MeshBasicMaterial({
+              map: videoTexture,
+            })
+          }
+        }      
+      });
+      
+      scene.background = new THREE.Color('#0b021a');
+      scene.add( model);
+    },
+    (xhr) => {
+      let percentage = Math.floor((xhr.loaded / xhr.total) * 100);
 
-    if (percentage !== lastLoggedPercentage) {
-        console.log(percentage + '% loaded');
-        lastLoggedPercentage = percentage;
+      if (percentage !== lastLoggedPercentage) {
+          console.log(percentage + '% loaded');
+          lastLoggedPercentage = percentage;
+      }
+    },
+    (error) => {
+      console.error("Error loading model", error);
+    });
+  }
+
+  // Use IntersectionObserver to trigger model loading when it's in view
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          loadModel(); // Load model when it's in view
+          observer.disconnect(); // Stop observing once the model is loaded
+        }
+      });
+    },
+    {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1 // Trigger when 10% of the model is in view
     }
-  },
-  (error) => {
-    console.error("Error loading model", error);
-  });
+  );
+
+  // Target the element that will trigger the model loading
+  const modelTrigger = document.querySelector('#model-trigger'); // Add an element that triggers the load
+  observer.observe(modelTrigger);
 
   function playHoverAnimation(object, isHovering) {
     let scale = 1.2;
