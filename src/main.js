@@ -262,7 +262,7 @@ const loadThree = async () => {
       requestAnimationFrame(() => {
         loadingScreenButton.textContent = "༄ ¡Bienvenido a mi mundo!";
       });
-    }, 3000);
+    }, 2000);
 
     let isDisabled = false;
 
@@ -270,35 +270,26 @@ const loadThree = async () => {
       if (isDisabled) return;
       isDisabled = true;
 
-      // Offload heavy work asynchronously
-      // Use setTimeout for non-urgent tasks
-      setTimeout(() => {
-        if (typeof requestIdleCallback === "function") {
-          requestIdleCallback(() => {
-            backgroundMusic.play();
-            playReveal();
-          });
-        } else {
-          // Fallback for environments where requestIdleCallback is not available
-          setTimeout(() => {
-            backgroundMusic.play();
-            playReveal();
-          }, 100); // Small delay to allow UI to update
-        }
-      }, 0);
+      backgroundMusic.play();
+      playReveal();
     }
 
-    loadingScreenButton.addEventListener("touchend", (e) => {
+    // Ensure both events work correctly
+    function handleTouch(e) {
       touchHappened = true;
       e.preventDefault();
       e.stopPropagation();
       handleEnter();
-    });
+    }
 
-    loadingScreenButton.addEventListener("click", (e) => {
+    function handleClick(e) {
       if (touchHappened) return;
       handleEnter();
-    });
+    }
+
+    // Attach event listeners
+    loadingScreenButton.addEventListener("touchend", handleTouch, { passive: false });
+    loadingScreenButton.addEventListener("click", handleClick);
   };
 
   function playReveal() {
@@ -306,8 +297,8 @@ const loadThree = async () => {
 
     tl.to(loadingScreen, {
       scale: 0.5,
-      duration: 1.2,
-      delay: 0.25,
+      duration: 0.7,
+      delay: 0.1,
       ease: "back.in(1.8)",
     }).to(
       loadingScreen,
