@@ -198,13 +198,13 @@ const loadThree = async () => {
 
     gsap.to(overlay, {
       opacity: 1,
-      duration: 0.5,
+      duration: 0.05,
     });
 
     gsap.to(modal, {
       opacity: 1,
       scale: 1,
-      duration: 0.5,
+      duration: 0.05,
       ease: "back.out(2)",
     });
   };
@@ -215,13 +215,13 @@ const loadThree = async () => {
 
     gsap.to(overlay, {
       opacity: 0,
-      duration: 0.5,
+      duration: 0.05,
     });
 
     gsap.to(modal, {
       opacity: 0,
       scale: 0,
-      duration: 0.5,
+      duration: 0.05,
       ease: "back.in(2)",
       onComplete: () => {
         modal.style.display = "none";
@@ -269,7 +269,7 @@ const loadThree = async () => {
     function handleEnter() {
       if (isDisabled) return;
       isDisabled = true;
-      
+
       playReveal();
 
       backgroundMusic.play();
@@ -298,15 +298,15 @@ const loadThree = async () => {
 
     tl.to(loadingScreen, {
       scale: 0.5,
-      duration: 0.7,
-      delay: 0.1,
+      duration: 0.3,
+      delay: 0.05,
       ease: "back.in(1.8)",
     }).to(
       loadingScreen,
       {
         y: "200vh",
         transform: "perspective(1000px) rotateX(45deg) rotateY(-35deg)",
-        duration: 0.8,
+        duration: 0.3,
         ease: "back.in(1.8)",
         onComplete: () => {
           loadingScreen.remove();
@@ -403,7 +403,7 @@ const loadThree = async () => {
 
   window.addEventListener("click", handleRaycasterInteraction);
 
-  const modelUrl = "/models/Room_Project.glb";
+  const modelUrl = "/models/Export.gltf?nocache=" + new Date().getTime();
   let lastLoggedPercentage = -1;
 
   let model = null;

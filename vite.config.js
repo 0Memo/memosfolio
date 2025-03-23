@@ -16,4 +16,5 @@ export default {
         chunkSizeWarningLimit: 1000,
     },
     assetsInclude: ['**/*.mp4', '**/*.glb', '**/*.gltf'],
+    publicDir: 'public',
 };
