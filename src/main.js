@@ -260,9 +260,9 @@ const loadThree = async () => {
     // Use setTimeout to show the next text after a slight delay
     setTimeout(() => {
       requestAnimationFrame(() => {
-        loadingScreenButton.textContent = "༄ ¡Bienvenido a mi mundo!";
+        loadingScreenButton.textContent = "༄ Welcome to my world!";
       });
-    }, 2000);
+    }, 2500);
 
     let isDisabled = false;
 
@@ -270,9 +270,21 @@ const loadThree = async () => {
       if (isDisabled) return;
       isDisabled = true;
 
-      playReveal();
+      loadingScreenButton.style.cursor = "default";
+      loadingScreenButton.style.border = "8px solid rgb(23, 4, 51)";
+      loadingScreenButton.style.background = "#e6dede";
+      loadingScreenButton.style.color = "rgba(20, 4, 44, 0.42)";
+      loadingScreenButton.style.boxShadow = "none";
+      loadingScreenButton.textContent = "༄ ¡Bienvenido a mi mundo!";
+      loadingScreen.style.background = "#e6dede";
+      isDisabled = true;
 
-      backgroundMusic.play();
+      requestAnimationFrame(() => {
+        requestIdleCallback(() => {
+          backgroundMusic.play();
+          playReveal();
+        });
+      });
     }
 
     // Ensure both events work correctly
@@ -298,15 +310,15 @@ const loadThree = async () => {
 
     tl.to(loadingScreen, {
       scale: 0.5,
-      duration: 0.3,
-      delay: 0.05,
+      duration: 0.6,
+      delay: 0.3,
       ease: "back.in(1.8)",
     }).to(
       loadingScreen,
       {
         y: "200vh",
         transform: "perspective(1000px) rotateX(45deg) rotateY(-35deg)",
-        duration: 0.3,
+        duration: 0.6,
         ease: "back.in(1.8)",
         onComplete: () => {
           loadingScreen.remove();
