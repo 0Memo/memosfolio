@@ -1,5 +1,9 @@
 // vite.config.js
 export default {
+    server: {
+        host: true, // Allow access from your local network
+        port: 5173, // Make sure it matches your firewall rule
+    },
     build: {
         rollupOptions: {
             output: {
